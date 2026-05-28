@@ -20,6 +20,7 @@ dist-ssr
 
 # Python
 venv/
+backend/venv/
 __pycache__/
 *.pyc
 
@@ -37,5 +38,3 @@ instance/
 *.njsproj
 *.sln
 *.sw?
-venv/
-backend/venv/

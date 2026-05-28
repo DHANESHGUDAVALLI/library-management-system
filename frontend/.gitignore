@@ -37,3 +37,5 @@ instance/
 *.njsproj
 *.sln
 *.sw?
+venv/
+backend/venv/

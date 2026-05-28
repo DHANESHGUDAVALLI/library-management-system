@@ -66,7 +66,14 @@ function App() {
           }
         />
 
-        <Route path="/book/:id" element={<BookDetails />} />
+        <Route
+          path="/book/:id"
+          element={
+            <ProtectedRoute>
+              <BookDetails />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/borrowed"
@@ -79,7 +86,11 @@ function App() {
 
         <Route
           path="/admin"
-          element={<Admin />}
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          }
         />
 
       </Routes>

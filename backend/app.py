@@ -8,7 +8,13 @@ from flask_jwt_extended import (
 )
 
 from extensions import db, bcrypt, jwt
-from google import genai
+
+import google.generativeai as genai
+
+# Configure Gemini API
+genai.configure(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
 
 from dotenv import load_dotenv
 import os
@@ -16,10 +22,6 @@ import os
 # Load Environment Variables
 load_dotenv()
 
-# Gemini Client
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
 
 # Flask App
 app = Flask(__name__)
@@ -374,19 +376,24 @@ def dashboard_stats():
         "borrowed": borrowed_count,
         "reading_hours": reading_hours
     }), 200
+
 # Chatbot Route
 @app.route("/chat", methods=["POST"])
 def chat():
 
-    data = request.get_json()
-
-    user_message = data.get("message")
-
     try:
 
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=user_message
+        data = request.get_json()
+
+        user_message = data.get("message")
+
+        # Gemini Model
+        model = genai.GenerativeModel(
+            "gemini-1.5-flash"
+        )
+
+        response = model.generate_content(
+            user_message
         )
 
         return jsonify({
@@ -398,7 +405,7 @@ def chat():
         print("CHATBOT ERROR:", e)
 
         return jsonify({
-            "reply": "Sorry, something went wrong."
+            "reply": f"Error: {str(e)}"
         }), 500
 
 import requests
